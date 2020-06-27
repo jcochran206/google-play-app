@@ -17,7 +17,10 @@ app.get('/apps', (req, res) => {
     const { genres, sort } = req.query;
 
     if(sort) {
-        if(!['Rating', "App"].includes(sort)){
+        if(
+            capitalize(sort).length > 0 &&
+            !['Rating', "App"].includes(capitalize(sort))){
+            
             return res
             .status(400)
             .send('give rating or app');
@@ -25,16 +28,22 @@ app.get('/apps', (req, res) => {
     }
 
     if(sort) {
-        const sortCap = capitalize(sort);
+        let capSort = capitalize(sort)
         appdata.sort((obj1,obj2) => {
-            return obj1[sortCap] > obj2[sortCap] ? 1 : obj1[sortCap] < obj2[sortCap] ? - 1 : 0;
+            return obj1[capSort] > obj2[capSort] ? 1 : obj1[capSort] < obj2[capSort] ? - 1 : 0;
         })
     }
 
+    const validGenre = ['Action', 'Puzzle', 'Strategy', 'Casual', 'Arcade', 'Card'];
+
     if(genres){
-        return res.json( appdata
-            .filter(appItem => appItem["Genres"].toLowerCase().includes(genres.toLowerCase()))
-        );
+        console.log(genres)
+        if(validGenre.includes(capitalize(genres))){
+            return res.json( appdata
+                .filter(appItem => appItem["Genres"].toLowerCase().includes(genres.toLowerCase())));     
+        }else{
+            return res.status(400).send('not valid genre')
+        }
     }
     
 
