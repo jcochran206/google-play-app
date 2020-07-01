@@ -37,7 +37,6 @@ app.get('/apps', (req, res) => {
     const validGenre = ['Action', 'Puzzle', 'Strategy', 'Casual', 'Arcade', 'Card'];
 
     if(genres){
-        console.log(genres)
         if(validGenre.includes(capitalize(genres))){
             return res.json( appdata
                 .filter(appItem => appItem["Genres"].toLowerCase().includes(genres.toLowerCase())));     
@@ -50,6 +49,4 @@ app.get('/apps', (req, res) => {
     res.json(appdata);
 });
 
-app.listen(port, () => {
-    console.log(`Server started on PORT ${port}`);
-  });
+module.exports = app;
